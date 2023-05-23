@@ -1,6 +1,8 @@
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Demo from "./component/UserMenagement";
+import Modal from "./component/Modal";
+
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
@@ -42,6 +44,7 @@ function App() {
           element={<Dashboard listmenu={menu} levelmenu={dataRoleUserDetail} />}
         />
         <Route path="/User" element={<Demo />} />
+        <Route path="/Modal" element={<Modal />} />
       </Routes>
     </Router>
   );

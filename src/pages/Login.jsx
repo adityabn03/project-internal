@@ -68,7 +68,7 @@ const Login = (props) => {
   const getPasswordUser = async () => {
     try {
       const PasswordUser = await axios.get(
-        "http://116.206.196.65:30983/skycore/Login/getPasswordUser/Testing",
+        "http://116.206.196.65:30983/skycore/Login/getPasswordUser/" + username,
         {
           headers: {
             "Content-Type": "application/json",
@@ -103,7 +103,6 @@ const Login = (props) => {
       });
 
       setUsernameCek(cekUser[0]);
-
       console.log(cekUser);
       setUserStatus(statusUser[0]);
       setUserIsLogin(userLogin[0]);
@@ -120,7 +119,7 @@ const Login = (props) => {
   const resetFailLogin = async () => {
     try {
       const failLogin = await axios.get(
-        "http://116.206.196.65:30983/skycore/Login/resetFailLogin/Testing",
+        "http://116.206.196.65:30983/skycore/Login/resetFailLogin/" + username,
         {
           headers: {
             "Content-Type": "application/json",
@@ -138,7 +137,7 @@ const Login = (props) => {
 
   // ! nanti atur secara dinamis
   const data1 = {
-    user: "Testing",
+    user: username,
     modules: "CORE",
   };
   const getDataUserRoleDetail = async () => {
@@ -194,7 +193,7 @@ const Login = (props) => {
 
   // ! nanti atur secara dinamis
   const dataFristLogin = {
-    p_userid: "Testing",
+    p_userid: username,
   };
 
   const getIsFristLogin = async () => {
@@ -231,7 +230,7 @@ const Login = (props) => {
   // !  atur secara dinamis
   const dataLogUserTracking = {
     plcd: "ua",
-    plusr: "Testing",
+    plusr: username,
     plhtt: "OFF",
     plsvrn: "uat-web-los",
     plact: "Login Success",
@@ -264,7 +263,7 @@ const Login = (props) => {
   const faillLogin = async () => {
     try {
       const failLoginuser = await axios.get(
-        "http://116.206.196.65:30983/skycore/Login/UserFailLogin/Testing",
+        "http://116.206.196.65:30983/skycore/Login/UserFailLogin/" + username,
         {
           headers: {
             "Content-Type": "application/json",
@@ -467,39 +466,41 @@ const Login = (props) => {
               <span>
                 {errorMessage && <p className="eror">{errorMessage}</p>}{" "}
               </span>
-                <div class="bg-zinc-600 rounded-md item-center mx-auto">
-              <div className="flex flex-nowrap gap-1 px-1 py-1 mx-auto my-auto">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={handleInputChange}
-                  className="input100-captha"
-                  placeholder="Enter CAPTCHA"
-                />
-                <br />
-                {expired ? (
-                  <div>
-                    <button
-                      className="btn btn-primary text-center items-center"
-                      onClick={() => {
-                        setCaptcha(generateCaptcha());
-                        setInput("");
-                        setExpired(false);
-                      }}>
-                      Refresh CAPTCHA
-                    </button>
-                  </div>
-                ) : (
-                  <img
-                    src={`https://dummyimage.com/200x100/000/fff&text=${captcha}`}
-                    alt="CAPTCHA"
-                    className="w-24 my-auto px-2 py-1 mx-auto"
+              <div class="bg-zinc-600 rounded-md item-center mx-auto">
+                <div className="flex flex-nowrap gap-1 px-1 py-1 mx-auto my-auto">
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={handleInputChange}
+                    className="input100-captha"
+                    placeholder="Enter CAPTCHA"
                   />
-                )}
-              </div>
+                  <br />
+                  {expired ? (
+                    <div>
+                      <button
+                        className="btn btn-primary text-center items-center"
+                        onClick={() => {
+                          setCaptcha(generateCaptcha());
+                          setInput("");
+                          setExpired(false);
+                        }}>
+                        Refresh CAPTCHA
+                      </button>
+                    </div>
+                  ) : (
+                    <img
+                      src={`https://dummyimage.com/200x100/000/fff&text=${captcha}`}
+                      alt="CAPTCHA"
+                      className="w-24 my-auto px-2 py-1 mx-auto"
+                    />
+                  )}
+                </div>
               </div>
               <div className="login-form-btn mx-auto my-2">
-                <button className="btn-accent px-44 py-1 rounded-full" type="submit">
+                <button
+                  className="btn-accent px-44 py-1 rounded-full"
+                  type="submit">
                   Login
                 </button>
               </div>

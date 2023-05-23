@@ -6,6 +6,7 @@ import { getToken } from "../API/api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
+import { BiReset } from "react-icons/bi";
 
 const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   const [token, setToken] = useState();
@@ -17,10 +18,16 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   const [superVisior, setSupervisior] = useState([]);
   const [role, setRole] = useState([]);
 
-  // const [date, setDate] = useState(users.usrefectivedate);
-  // console.log(date);
+  // const [ckeck, setCheck] = useState();
 
-  // const formattedDate = format(date, "yyyy-MM-dd'");
+  // console.log(users.usrstatus);
+  // console.log(users);
+
+  // useEffect(() => {
+  //   if (users.usrstatus === 1) {
+  //     setCheck(true);
+  //   }
+  // }, [isChecked]);
 
   const getTokenApi = () => {
     getToken().then((e) => {
@@ -47,20 +54,20 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   };
 
   const dataEditUser = {
-    p_usrid: users.usruserid,
-    p_name: users.usrname,
-    p_nip: users.usrnip,
-    p_email: users.usremail,
-    p_notlp: users.usrnotlp,
-    p_branchcode: users.usrbranch,
-    p_spv: users.usrsupervisor,
-    p_position: users.usrposition,
-    p_acclevel: "administrator",
-    p_efectivedate: "2019-06-03 00:00:00.000",
-    p_status: "true",
-    p_usr: "bani",
-    p_defaultpwd: "",
-    p_logid: "13",
+    // p_usrid: users.usruserid,
+    // p_name: users.usrname,
+    // p_nip: users.usrnip,
+    // p_email: users.usremail,
+    // p_notlp: users.usrnotlp,
+    // p_branchcode: users.usrbranch,
+    // p_spv: users.usrsupervisor,
+    // p_position: users.usrposition,
+    // p_acclevel: "administrator",
+    // p_efectivedate: "2019-06-03 00:00:00.000",
+    // p_status: "true",
+    // p_usr: "bani",
+    // p_defaultpwd: "",
+    // p_logid: "13",
   };
 
   const EditUser = async () => {
@@ -80,7 +87,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
       reload();
       onClose();
     } catch (error) {
-      // alert(error);
+      console.log(error);
     }
   };
 
@@ -109,7 +116,6 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
       // console.l.usrnotlp
       setBranch(cekData);
     } catch (error) {
-      // alert(error);
       console.log(error);
     }
   };
@@ -139,7 +145,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
       // console.log(cekData);
       setSupervisior(cekData);
     } catch (error) {
-      // alert(error);
+      console.log(error);
     }
   };
 
@@ -168,13 +174,18 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
       console.log(cekData);
       setRole(cekData);
     } catch (error) {
-      // alert(error);
+      console.log(error);
     }
   };
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
+
+  // useEffect(() => {
+
+  //   if
+  // }, [isChecked]);
 
   const checkBoxStyle = {
     margin: 0,
