@@ -216,13 +216,9 @@ const UserMenagement = () => {
           <h4> User Menagement</h4>
         </div>
         <div className="btn-new">
-          <label htmlFor="my-modal-4" className="btn">
-            open modal
-          </label>
-          <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-          {/* <button className="btn btn-primary" onClick={openModal}>
+          <button className="btn btn-primary" onClick={openModal}>
             Add new
-          </button> */}
+          </button>
         </div>
       </div>
 

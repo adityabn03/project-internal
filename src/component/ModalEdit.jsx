@@ -192,8 +192,8 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   };
   if (!isOpen) return null;
   return (
-    <div className="modal" tabindex="-1">
-      <div className="modal-dialog">
+    <div class="fixed inset-0 flex items-center justify-center z-50">
+  <div class="absolute bg-white p-6 rounded-lg shadow-lg">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">User Edit</h5>

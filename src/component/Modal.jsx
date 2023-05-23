@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import "bootstrap/dist/css/bootstrap.min.css";
-import "../assets/css/modal.css";
+// import "../assets/css/modal.css";
 import axios from "axios";
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
@@ -30,15 +30,15 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
   const [role, setRole] = useState([]);
   const [roleName, setRoleName] = useState("");
 
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [startDate, setStartDate] = useState(null);
   const [tampung, setTampung] = useState(null);
 
   useEffect(() => {
-    if (selectedDate !== null) {
-      const formattedDate = format(selectedDate, "yyyy-MM-dd");
+    if (startDate !== null) {
+      const formattedDate = format(startDate, "yyyy-MM-dd");
       setTampung(formattedDate);
     }
-  }, [selectedDate]);
+  }, [startDate]);
 
   // untuk Token yang tersimpan di session
   const sessionData = JSON.parse(localStorage.getItem("tokenData"));
@@ -170,7 +170,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
       // console.log(cekData);
       setBranch(cekData);
     } catch (error) {
-      console.logh(error);
+      console.log(error);
     }
   };
 
@@ -239,8 +239,8 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal" tabindex="-1">
-      <div className="modal-dialog">
+    <div class="fixed inset-0 flex items-center justify-center z-50">
+    <div class="absolute bg-white p-6 rounded-lg shadow-lg">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title fw-bold">User Add New</h5>
@@ -249,7 +249,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
-              onClick={onClose}></button>
+              onClick={onClose}>kuyuk</button>
           </div>
           <div className="modal-body">
             <form>
@@ -431,8 +431,9 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
                       <div className="col-9">
                         <DatePicker
                           className="form-control"
-                          // selected={startDate}
-                          // onChange={(date) => setStartDate(date)}
+                          selected={startDate}
+                          onChange={(date) => setStartDate(date)}
+                          dateFormat="yyyy/MM/dd"
                         />
                       </div>
                     </div>
