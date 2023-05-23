@@ -5,45 +5,51 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { format, parse } from "date-fns";
 
 const Modal = ({ isOpen, onClose, reload, currentUser }) => {
-  const [user, setUser] = useState(currentUser);
+  // const [user, setUser] = useState(currentUser);
 
-  useEffect(() => {
-    setUser(currentUser);
-  }, [currentUser]);
+  // useEffect(() => {
+  //   setUser(currentUser);
+  // }, [currentUser]);
 
   const [isChecked, setIsChecked] = useState(false);
-
   const [status, setStatus] = useState("");
-  const [userId, setUserId] = useState("false");
+  const [userId, setUserId] = useState("");
+
+  console.log(userId);
   const [name, setName] = useState("");
   const [nip, setNip] = useState("");
   const [email, setEmail] = useState("");
   const [noTelepon, setNoTelepon] = useState("");
-
   const [branch, setBranch] = useState([]);
   const [branchName, setBranchName] = useState("");
-
   const [superVisior, setSupervisior] = useState([]);
   const [superVisiorName, setSupervisiorName] = useState("");
-
   const [role, setRole] = useState([]);
   const [roleName, setRoleName] = useState("");
 
-  // console.log(isChecked);
-  // console.log(status);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [tampung, setTampung] = useState(null);
+
+  useEffect(() => {
+    if (selectedDate !== null) {
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
+      setTampung(formattedDate);
+    }
+  }, [selectedDate]);
 
   // untuk Token yang tersimpan di session
   const sessionData = JSON.parse(localStorage.getItem("tokenData"));
-
   // console.log(sessionData);
   const token = sessionData;
+
   useEffect(() => {
     DropDown();
     DropDownSv();
     DropDownRl();
-  }, [isOpen]);
+  }, [userId]);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -60,8 +66,14 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
       setStatus("False");
     }
   }, [isChecked]);
+
+  const Save = () => {
+    postDataLogUserTracking();
+    InsertUserNew();
+  };
   //! --------for API Create USer--------
-  const hitDelete = {
+
+  const insertUser = {
     p_usrid: userId,
     p_name: name,
     p_nip: nip,
@@ -71,7 +83,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
     p_spv: superVisiorName,
     p_position: "SUPPORT",
     p_acclevel: "1",
-    p_efectivedate: "2020-09-30",
+    p_efectivedate: tampung,
     p_status: status,
     p_usr: "kijang1",
     p_defaultpwd: "f7c75d9b669cc01447b415eb3bfbf8319fe4c231",
@@ -82,7 +94,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
     try {
       const userNew = await axios.post(
         "http://116.206.196.65:30983/skycore/User/postJDataInsertRecord",
-        JSON.stringify(hitDelete),
+        JSON.stringify(insertUser),
         {
           headers: {
             "Content-Type": "application/json",
@@ -96,14 +108,47 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
       reload();
       onClose();
     } catch (error) {
-      alert(error);
+      console.log(error);
+    }
+  };
+
+  const dataLogUserTracking = {
+    plcd: "ua",
+    plusr: userId,
+    plhtt: "OFF",
+    plsvrn: "uat-web-los",
+    plact: "Login Success",
+    plpgur: "/lmsadmin_ocbc/login/v6/nc",
+    plqry: "-",
+    plbro: "Firefox 72.0",
+    plos: "linux",
+    plcli: "uat-web-los/10.1.1.1",
+  };
+
+  const postDataLogUserTracking = async () => {
+    try {
+      await axios.post(
+        "http://116.206.196.65:30983/skycore/LogActivity/postDataLogUserTracking",
+        dataLogUserTracking,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("postDataLogUserTracking Berhasil");
+    } catch (error) {
+      alert("postDataLogUserTracking Tidak Berhasil");
+      console.log(error);
     }
   };
 
   //! dropdown ddl branch
   const hitDropdown = {
     type: "branch",
-    usr: "crm_admin",
+    usr: userId,
   };
 
   const DropDown = async () => {
@@ -125,14 +170,14 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
       // console.log(cekData);
       setBranch(cekData);
     } catch (error) {
-      alert(error);
+      console.logh(error);
     }
   };
 
   //! dropdown ddl supervisor
   const hitDropdownSv = {
     type: "supervisor",
-    usr: "crm_admin",
+    usr: userId,
   };
 
   const DropDownSv = async () => {
@@ -154,14 +199,14 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
       // console.log(cekData);
       setSupervisior(cekData);
     } catch (error) {
-      alert(error);
+      console.log(error);
     }
   };
 
   //! dropdown ddl Role
   const hitDropdownRl = {
     type: "level",
-    usr: "crm_admin",
+    usr: userId,
   };
 
   const DropDownRl = async () => {
@@ -183,9 +228,13 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
       console.log(cekData);
       setRole(cekData);
     } catch (error) {
-      alert(error);
+      console.log(error);
     }
   };
+
+  const dateString = "2020-09-30T00:00:00";
+  const dateObject = new Date(dateString);
+  console.log(dateObject);
 
   if (!isOpen) return null;
 

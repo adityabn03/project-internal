@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 // import { BsFillPersonPlusFill } from "react-icons/bs";
 // import { ImSearch } from "react-icons/im";
 
-const Demo = () => {
+const UserMenagement = () => {
   const [users, setUsers] = useState([]);
   const [status, setStatus] = useState();
 
@@ -16,19 +16,6 @@ const Demo = () => {
 
   // ! variables untuk kebutuhan hit delete user
   const [userID, setUserId] = useState("");
-
-  // const [users, setUsers] = useState([
-  //   { id: 1, name: "John Doe", age: 25 },
-  //   { id: 2, name: "Jane Smith", age: 30 },
-  //   { id: 3, name: "Bob Johnson", age: 35 },
-  //   { id: 4, name: "Grasia", age: 25 },
-  //   { id: 5, name: "Aida", age: 30 },
-  //   { id: 6, name: "Puspita", age: 35 },
-  //   { id: 7, name: "Anatahius", age: 25 },
-  //   { id: 8, name: "Lulu", age: 30 },
-  //   { id: 9, name: "Rinto", age: 35 },
-  //   { id: 10, name: "Oci", age: 25 },
-  // ]);
 
   // Dapatkan data sesi
   const sessionData = JSON.parse(localStorage.getItem("tokenData"));
@@ -203,6 +190,7 @@ const Demo = () => {
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -228,9 +216,13 @@ const Demo = () => {
           <h4> User Menagement</h4>
         </div>
         <div className="btn-new">
-          <button className="btn btn-primary" onClick={openModal}>
+          <label htmlFor="my-modal-4" className="btn">
+            open modal
+          </label>
+          <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+          {/* <button className="btn btn-primary" onClick={openModal}>
             Add new
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -333,7 +325,6 @@ const Demo = () => {
         demo={getUserDetail}
         reload={getUserList}
       /> */}
-
       {userEdit !== undefined ? (
         <ModalEdit
           isOpen={isModalOpenEdit}
@@ -360,7 +351,7 @@ const Demo = () => {
   );
 };
 
-export default Demo;
+export default UserMenagement;
 
 // import React, { useState, useEffect } from "react";
 // import "bootstrap/dist/css/bootstrap.min.css";
