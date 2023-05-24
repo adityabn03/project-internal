@@ -316,7 +316,7 @@ const Login = (props) => {
           console.log(4);
           if (userDateTampungan !== "") {
             console.log(5);
-            if (uslPassword !== "") {
+            if (hashedPassword === uslPassword) {
               console.log(6);
               resetFailLogin();
               getDataUserRoleDetail();
@@ -324,6 +324,7 @@ const Login = (props) => {
               getIsFristLogin();
             } else if (hashedPassword !== uslPassword) {
               //hit API UserFalLogin
+              alert("password Salah");
               faillLogin();
               // resetFailLogin();
             }

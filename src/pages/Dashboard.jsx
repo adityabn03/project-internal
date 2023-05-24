@@ -6,11 +6,18 @@ import Sky from "../assets/images/Sky.png";
 import Skysite from "../assets/images/LogoSky.png";
 import "../assets/css/Dashboard.css";
 import Demo from "../component/UserMenagement";
+import Rule from "../component/RuleMenagement";
 import { IconName } from "react-icons/ri";
 import "../assets/css/modal.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
 import { getToken } from "../API/api";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
 
 const Dashboard = ({ listmenu, levelmenu, user }) => {
   const [menuList, setMenuList] = useState(listmenu);
@@ -21,6 +28,8 @@ const Dashboard = ({ listmenu, levelmenu, user }) => {
   const [userActive, setUserActive] = useState(user);
   const [token, setToken] = useState();
   const navigate = useNavigate();
+
+  const [ruleMenagement, setruleMenagement] = useState(false);
 
   const getTokenApi = () => {
     getToken().then((e) => {
@@ -290,6 +299,9 @@ const Dashboard = ({ listmenu, levelmenu, user }) => {
     navigate("/");
   };
 
+  const testing = () => {
+    setruleMenagement(true);
+  };
   return (
     <div id="page-top">
       <div id="wrapper">
@@ -315,6 +327,27 @@ const Dashboard = ({ listmenu, levelmenu, user }) => {
               {/* <li
                 className="nav-item"
                 dangerouslySetInnerHTML={{ __html: html }}></li> */}
+              <li className="py-2 px-4 hover:bg-gray-700">
+                {" "}
+                <a
+                  class=" text-white-500 flex items-center justify-between py-1.5 px-4 rounded cursor-pointer"
+                  onClick={() => setruleMenagement(false)}>
+                  <span class="flex items-center space-x-2">
+                    <span className="font-bold">User Menagement</span>
+                  </span>
+                </a>
+              </li>
+
+              <li className="py-2 px-4 hover:bg-gray-700">
+                {" "}
+                <a
+                  class=" text-white-500 flex items-center justify-between py-1.5 px-4 rounded cursor-pointer"
+                  onClick={() => setruleMenagement(true)}>
+                  <span class="flex items-center space-x-2">
+                    <span className="font-bold">Role Menagement</span>
+                  </span>
+                </a>
+              </li>
             </ul>
           </div>
         ) : (
@@ -351,7 +384,17 @@ const Dashboard = ({ listmenu, levelmenu, user }) => {
                   <button
                     className="btn mr-3"
                     onClick={() => setSideBarHide(false)}>
-                    <i className="fa fa-bars"></i>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-6 h-6">
+                      <path
+                        fillRule="evenodd"
+                        d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
                   </button>
                 </>
               ) : (
@@ -359,21 +402,43 @@ const Dashboard = ({ listmenu, levelmenu, user }) => {
                   <button
                     className="btn mr-3 "
                     onClick={() => setSideBarHide(true)}>
-                    <i className="fa fa-bars"></i>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-6 h-6">
+                      <path
+                        fillRule="evenodd"
+                        d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
                   </button>
                 </>
               )}
 
               <ul className="navbar-nav ml-auto">
-                <li className="nav-item dropdown no-arrow">
-                  <a href="/" className="log-out">
-                    <i className="fa fa-user-circle"></i> Log Out
+                <li className="nav-item dropdown no-arrow flex">
+                  <a href="/" className="log-out flex">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="w-6 h-6">
+                      <path
+                        fill-rule="evenodd"
+                        d="M7.5 3.75A1.5 1.5 0 006 5.25v13.5a1.5 1.5 0 001.5 1.5h6a1.5 1.5 0 001.5-1.5V15a.75.75 0 011.5 0v3.75a3 3 0 01-3 3h-6a3 3 0 01-3-3V5.25a3 3 0 013-3h6a3 3 0 013 3V9A.75.75 0 0115 9V5.25a1.5 1.5 0 00-1.5-1.5h-6zm10.72 4.72a.75.75 0 011.06 0l3 3a.75.75 0 010 1.06l-3 3a.75.75 0 11-1.06-1.06l1.72-1.72H9a.75.75 0 010-1.5h10.94l-1.72-1.72a.75.75 0 010-1.06z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    <span>Log Out</span>
                   </a>
                 </li>
               </ul>
             </nav>
+            {/* <Demo /> */}
 
-            <Demo />
+            {ruleMenagement === false ? <Demo /> : <Rule />}
           </div>
 
           <footer className="sticky-footer bg-white">

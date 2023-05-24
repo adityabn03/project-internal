@@ -229,7 +229,7 @@ const UserMenagement = () => {
             <div className="page-iittem">
               <input
                 type="text"
-                placeholder="Cari pengguna..."
+                placeholder="Search by Name"
                 value={searchTerm}
                 onChange={handleSearch}
                 className="form-control"
@@ -239,29 +239,38 @@ const UserMenagement = () => {
             {/* <input type="number" /> */}
           </div>
           <div className="datatable-container">
-            <table
-              className="table table-bordered dataTable"
-              id="dataTable"
-              cellSpacing="0">
+            <table className="min-w-max w-full table-auto">
               <thead>
-                <tr>
-                  <th>User Id</th>
-                  <th>Name</th>
-                  <th>Nip</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Action</th>
+                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                  <th className="py-3 px-6 text-left">User Id</th>
+                  <th className="py-3 px-6 text-left">Name</th>
+                  <th className="py-3 px-6 text-center">Nip</th>
+                  <th className="py-3 px-6 text-center">Role</th>
+                  <th className="py-3 px-6 text-center">Status</th>
+                  <th className="py-3 px-6 text-center">Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-gray-600 text-sm font-light border-b">
                 {filteredUsers.map((user) => (
-                  <tr key={user.usrid}>
-                    <td>{user.usruserid}</td>
-                    <td>{user.usrname}</td>
-                    <td>{user.usrnip}</td>
-                    <td>{user.usrsupervisor}</td>
-                    <td>{user.usrstatusformat}</td>
-                    <td>
+                  <tr
+                    key={user.usrid}
+                    className=" transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
+                    <td className="py-3 px-6 text-left whitespace-nowrap font-semibold">
+                      {user.usruserid}
+                    </td>
+                    <td className="py-3 px-6 text-left  whitespace-nowrap font-semibold">
+                      {user.usrname}
+                    </td>
+                    <td className="py-3 px-6 text-center whitespace-nowrap font-semibold">
+                      {user.usrnip}
+                    </td>
+                    <td className="py-3 px-6 text-center whitespace-nowrap font-semibold">
+                      {user.usraccesslevel}
+                    </td>
+                    <td className="py-3 px-6 text-center  whitespace-nowrap font-semibold ">
+                      {user.usrstatusformat}
+                    </td>
+                    <td className="py-3 px-6 text-center  whitespace-nowrap ">
                       <button
                         className="btn btn-success btn-sm"
                         onClick={() => editUser(user.usruserid)}>
@@ -272,7 +281,7 @@ const UserMenagement = () => {
                         onClick={() => handleDeleteUser(user.usruserid)}>
                         Hapus
                       </button>
-                      {user.usrstatusformat === "Active" ? (
+                      {user.usrstatusformat !== "Active" ? (
                         <button className="btn btn-warning btn-sm ml-1">
                           Active
                         </button>
@@ -285,7 +294,7 @@ const UserMenagement = () => {
               </tbody>
             </table>
             {/* Pagination */}
-            <nav>
+            <nav className="mt-2">
               <div className="pagination-item d-flex justify-content-between">
                 <div className="page-1"></div>
                 <div className="page-2">

@@ -16,7 +16,6 @@ function App() {
 
   const [dataRoleUserDetail, setDataRoleUserDetail] = useState([]);
   const [menu, setMenu] = useState({});
-
   const handleDataFromChild = (data) => {
     setAdmin(data);
   };

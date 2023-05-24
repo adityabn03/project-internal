@@ -54,20 +54,20 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   };
 
   const dataEditUser = {
-    // p_usrid: users.usruserid,
-    // p_name: users.usrname,
-    // p_nip: users.usrnip,
-    // p_email: users.usremail,
-    // p_notlp: users.usrnotlp,
-    // p_branchcode: users.usrbranch,
-    // p_spv: users.usrsupervisor,
-    // p_position: users.usrposition,
-    // p_acclevel: "administrator",
-    // p_efectivedate: "2019-06-03 00:00:00.000",
-    // p_status: "true",
-    // p_usr: "bani",
-    // p_defaultpwd: "",
-    // p_logid: "13",
+    p_usrid: users.usruserid,
+    p_name: users.usrname,
+    p_nip: users.usrnip,
+    p_email: users.usremail,
+    p_notlp: users.usrnotlp,
+    p_branchcode: users.usrbranch,
+    p_spv: users.usrsupervisor,
+    p_position: users.usrposition,
+    p_acclevel: "administrator",
+    p_efectivedate: "2019-06-03",
+    p_status: "True",
+    p_usr: "bani",
+    p_defaultpwd: "",
+    p_logid: "13",
   };
 
   const EditUser = async () => {
@@ -193,7 +193,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   if (!isOpen) return null;
   return (
     <div class="fixed inset-0 flex items-center justify-center z-50">
-  <div class="absolute bg-white p-6 rounded-lg shadow-lg">
+      <div class="absolute bg-white p-6 rounded-lg shadow-lg">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">User Edit</h5>
@@ -397,6 +397,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         // value={date}
                         // name="usrefectivedate"
                         onChange={handleInputChange}
+                        disabled
                         // onChange={(date) => setStartDate(date)}
                       />
                     </div>
@@ -412,6 +413,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         type="text"
                         className="form-control"
                         id="recipient-name"
+                        disabled
                       />
                     </div>
                   </div>

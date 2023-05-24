@@ -86,7 +86,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
     p_efectivedate: tampung,
     p_status: status,
     p_usr: "kijang1",
-    p_defaultpwd: "f7c75d9b669cc01447b415eb3bfbf8319fe4c231",
+    p_defaultpwd: "5fec4ba8376f207d1ff2f0cac0882b01",
     p_logid: "12",
   };
 
@@ -240,7 +240,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
 
   return (
     <div class="fixed inset-0 flex items-center justify-center z-50">
-    <div class="absolute bg-white p-6 rounded-lg shadow-lg">
+      <div class="absolute bg-white p-6 rounded-lg shadow-lg">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title fw-bold">User Add New</h5>
@@ -249,7 +249,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
-              onClick={onClose}>kuyuk</button>
+              onClick={onClose}></button>
           </div>
           <div className="modal-body">
             <form>
