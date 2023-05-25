@@ -16,6 +16,8 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   const [branch, setBranch] = useState([]);
   const [superVisior, setSupervisior] = useState([]);
   const [role, setRole] = useState([]);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
 
   const [tampungDate, settampungDate] = useState(users.usrefectivedate);
 
@@ -189,7 +191,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
               aria-label="Close"
               onClick={onClose}></button>
           </div>
-          <div className="modal-body">
+          <div className="modal_body">
             <form>
               <div className="row">
                 <div className="col-6">
@@ -216,24 +218,24 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                   <div className=" row mb-1">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        Name
+                        Name <span className="text-danger">*</span>
                       </label>
                     </div>
-
                     <div className="col-9">
                       <input
                         type="text"
                         className="form-control"
                         value={users.usrname}
                         name="usrname"
-                        onChange={handleInputChange}
+                        onChange={handleInputChange}         
+                        required
                       />
                     </div>
                   </div>
                   <div className=" row mb-1">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        NIP
+                        NIP <span className="text-danger">*</span>
                       </label>
                     </div>
                     <div className="col-9">
@@ -244,13 +246,14 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         value={users.usrnip}
                         name="usrnip"
                         onChange={handleInputChange}
+                        required
                       />
                     </div>
                   </div>
                   <div className=" row mb-1">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        Email
+                        Email <span className="text-danger">*</span>
                       </label>
                     </div>
                     <div className="col-9">
@@ -260,13 +263,14 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         value={users.usremail}
                         name="usremail"
                         onChange={handleInputChange}
+                        required
                       />
                     </div>
                   </div>
                   <div className=" row mb-1">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        No Tlp
+                        No Tlp <span className="text-danger">*</span>
                       </label>
                     </div>
                     <div className="col-9">
@@ -277,6 +281,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         value={users.usrnotlp}
                         name="usrnotlp"
                         onChange={handleInputChange}
+                        required
                       />
                     </div>
                   </div>
@@ -382,7 +387,8 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         className="form-control"
                         value={users.usrefectivedate}
                         name="usrefectivedate"
-                        onChange={handleInputChange}
+                        onChange={(event) => handleInputChange(event, users.usrefectivedate)}
+                        
                         // onChange={(date) => setStartDate(date)}
                       />
                     </div>
@@ -404,8 +410,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                   </div>
                 </div>
               </div>
-            </form>
-          </div>
+            
           <div className="modal-footer">
             <button
               type="button"
@@ -415,11 +420,14 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
               Close
             </button>
             <button
-              type="button"
+              type="submit"
               className="btn btn-primary"
-              onClick={EditUser}>
+              // onClick={EditUser}
+              >
               Save changes
             </button>
+          </div>
+          </form>
           </div>
         </div>
       </div>
