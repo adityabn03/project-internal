@@ -422,7 +422,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
             <button
               type="submit"
               className="btn btn-primary"
-              // onClick={EditUser}
+              onClick={EditUser}
               >
               Save changes
             </button>
