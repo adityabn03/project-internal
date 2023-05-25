@@ -10,7 +10,6 @@ import Rule from "../component/RuleMenagement";
 import { IconName } from "react-icons/ri";
 import "../assets/css/modal.css";
 import axios from "axios";
-
 import { getToken } from "../API/api";
 import {
   BrowserRouter as Router,

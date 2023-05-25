@@ -10,6 +10,8 @@ import Swal from "sweetalert2";
 
 const UserMenagement = () => {
   const [users, setUsers] = useState([]);
+
+  console.log(users);
   const [status, setStatus] = useState();
 
   const [currentUser, setCurrentUser] = useState(users);
@@ -213,7 +215,7 @@ const UserMenagement = () => {
     <div className="card shadow mb-4">
       <div className="card-header d-flex justify-content-between mb-2">
         <div className="test">
-          <h4> User Menagement</h4>
+          <h4> User Management</h4>
         </div>
         <div className="btn-new">
           <button className="btn btn-primary" onClick={openModal}>
@@ -254,7 +256,7 @@ const UserMenagement = () => {
                 {filteredUsers.map((user) => (
                   <tr
                     key={user.usrid}
-                    className=" transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
+                    className=" transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 white:hover:bg-neutral-600">
                     <td className="py-3 px-6 text-left whitespace-nowrap font-semibold">
                       {user.usruserid}
                     </td>
@@ -320,16 +322,9 @@ const UserMenagement = () => {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal} reload={getUserList}>
-        <button onClick={closeModal}>Tutup Modal</button>
+        {/* <button onClick={closeModal}>Tutup Modal</button> */}
       </Modal>
 
-      {/* <ModalEdit
-        isOpen={isModalOpenEdit}
-        onClose={closeModalEdit}
-        currentUser={userEdit}
-        demo={getUserDetail}
-        reload={getUserList}
-      /> */}
       {userEdit !== undefined ? (
         <ModalEdit
           isOpen={isModalOpenEdit}
@@ -340,18 +335,6 @@ const UserMenagement = () => {
       ) : (
         <></>
       )}
-
-      {/*  modal edit */}
-
-      {/* {isModalOpenEdit ? (
-        <ModalEdit
-          isOpen={isModalOpenEdit}
-          onClose={closeModalEdit}
-          currentUser={userEdit}
-        />
-      ) : (
-        <></>
-      )} */}
     </div>
   );
 };

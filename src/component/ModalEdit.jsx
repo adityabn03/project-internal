@@ -12,22 +12,12 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   const [token, setToken] = useState();
   const [users, setUser] = useState(currentUser);
   console.log(users);
-
   const [isChecked, setIsChecked] = useState(false);
   const [branch, setBranch] = useState([]);
   const [superVisior, setSupervisior] = useState([]);
   const [role, setRole] = useState([]);
 
-  // const [ckeck, setCheck] = useState();
-
-  // console.log(users.usrstatus);
-  // console.log(users);
-
-  // useEffect(() => {
-  //   if (users.usrstatus === 1) {
-  //     setCheck(true);
-  //   }
-  // }, [isChecked]);
+  const [tampungDate, settampungDate] = useState(users.usrefectivedate);
 
   const getTokenApi = () => {
     getToken().then((e) => {
@@ -38,7 +28,6 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   useEffect(() => {
     getTokenApi();
     setUser(currentUser);
-
     DropDown();
     DropDownSv();
     DropDownRl();
@@ -182,14 +171,10 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
     setIsChecked(!isChecked);
   };
 
-  // useEffect(() => {
-
-  //   if
-  // }, [isChecked]);
-
   const checkBoxStyle = {
     margin: 0,
   };
+
   if (!isOpen) return null;
   return (
     <div class="fixed inset-0 flex items-center justify-center z-50">
@@ -223,6 +208,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         name="usruserid"
                         value={users.usruserid}
                         onChange={handleInputChange}
+                        disabled
                         // onChange={(e) => setUserId(e.target.value)}
                       />
                     </div>
@@ -356,8 +342,8 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         type="text"
                         className="form-control"
                         id="recipient-name"
-                        name="usrposition"
-                        value={users.usrposition}
+                        name="usraccesslevel"
+                        value={users.usraccesslevel}
                         onChange={handleInputChange}>
                         {role.map((item, i) => {
                           return (
@@ -394,10 +380,9 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                     <div className="col-9">
                       <DatePicker
                         className="form-control"
-                        // value={date}
-                        // name="usrefectivedate"
+                        value={users.usrefectivedate}
+                        name="usrefectivedate"
                         onChange={handleInputChange}
-                        disabled
                         // onChange={(date) => setStartDate(date)}
                       />
                     </div>

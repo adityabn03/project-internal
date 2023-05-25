@@ -17,7 +17,6 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [status, setStatus] = useState("");
   const [userId, setUserId] = useState("");
-
   console.log(userId);
   const [name, setName] = useState("");
   const [nip, setNip] = useState("");
@@ -28,7 +27,11 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
   const [superVisior, setSupervisior] = useState([]);
   const [superVisiorName, setSupervisiorName] = useState("");
   const [role, setRole] = useState([]);
-  const [roleName, setRoleName] = useState("");
+  const [roleName, setRoleName] = useState();
+  const numRole = parseInt(roleName);
+
+  console.log(numRole);
+  console.log(typeof numRole);
 
   const [startDate, setStartDate] = useState(null);
   const [tampung, setTampung] = useState(null);
@@ -42,7 +45,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
 
   // untuk Token yang tersimpan di session
   const sessionData = JSON.parse(localStorage.getItem("tokenData"));
-  // console.log(sessionData);
+
   const token = sessionData;
 
   useEffect(() => {
@@ -82,7 +85,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
     p_branchcode: branchName,
     p_spv: superVisiorName,
     p_position: "SUPPORT",
-    p_acclevel: "1",
+    p_acclevel: numRole,
     p_efectivedate: tampung,
     p_status: status,
     p_usr: "kijang1",
@@ -384,7 +387,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
                   </div>
                   <div className=" row mb-2">
                     <div className="col-3">
-                      <label for="exampleInputEmail1" class="form-label">
+                      <label for="exampleInputEmail1" className="form-label">
                         Role
                       </label>
                     </div>
@@ -407,7 +410,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
                   </div>
                   <div className=" row mb-2">
                     <div className="col-3">
-                      <label for="exampleInputEmail1" class="form-label">
+                      <label for="exampleInputEmail1" className="form-label">
                         Status
                       </label>
                     </div>
@@ -452,10 +455,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
               onClick={onClose}>
               Close
             </button>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={InsertUserNew}>
+            <button type="button" className="btn btn-primary" onClick={Save}>
               Save
             </button>
           </div>
