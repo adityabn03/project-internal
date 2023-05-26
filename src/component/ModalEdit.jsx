@@ -18,6 +18,8 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   const [role, setRole] = useState([]);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  const [formError, setFormError] = useState(false);
+
 
   const [tampungDate, settampungDate] = useState(users.usrefectivedate);
 
@@ -37,7 +39,21 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-
+  
+    if (name === "usrname"  ) {
+      // Validasi hanya huruf alfabet atau string kosong
+      const alphabetRegex = /^[A-Za-z\s]*$/; // Regular expression for alphabet and space
+      if (value !== "" && !alphabetRegex.test(value)) {
+        return; // Jika input tidak valid, hentikan proses selanjutnya
+      }
+    } else if (name === "usrnip" || name === "usrnotlp") {
+      // Validasi hanya angka atau string kosong
+      const numberRegex = /^\d*$/; // Regular expression for numbers
+      if (value !== "" && !numberRegex.test(value)) {
+        return; // Jika input tidak valid, hentikan proses selanjutnya
+      }
+    }
+  
     setUser((prevState) => ({
       ...prevState,
       [name]: value,
@@ -62,10 +78,16 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   };
 
   const EditUser = async () => {
+    // Validasi input sebelum mengirim permintaan POST
+    if (!users.usrname || !users.usrnip) {
+      Swal.fire("Mohon lengkapi semua field", "", "error");
+      return;
+    }
+
     try {
       await axios.post(
         "http://116.206.196.65:30983/skycore/User/postJDataEditRecord",
-        JSON.stringify(dataEditUser),
+        JSON.stringify(users),
         {
           headers: {
             "Content-Type": "application/json",
@@ -240,7 +262,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                     </div>
                     <div className="col-9">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
                         id="recipient-name"
                         value={users.usrnip}
@@ -275,7 +297,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                     </div>
                     <div className="col-9">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
                         id="recipient-name"
                         value={users.usrnotlp}

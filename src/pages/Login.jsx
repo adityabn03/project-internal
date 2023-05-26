@@ -394,7 +394,7 @@ const Login = (props) => {
     const timer = setTimeout(() => {
       setCaptcha(generateCaptcha());
       setInput("");
-      //dalam 3 detik expired akan di set menjadi true
+      // dalam 3 detik expired akan di set menjadi true
       setExpired(true);
     }, 30000);
     return () => clearTimeout(timer);
@@ -406,7 +406,7 @@ const Login = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (input.toUpperCase() === captcha.toUpperCase()) {
+    if (input === captcha) {
       alert("CAPTCHA validated successfully!");
       getTokenApi();
     } else {

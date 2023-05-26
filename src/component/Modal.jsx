@@ -28,6 +28,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
   const [superVisiorName, setSupervisiorName] = useState("");
   const [role, setRole] = useState([]);
   const [roleName, setRoleName] = useState();
+  
   const numRole = parseInt(roleName);
 
   console.log(numRole);
@@ -71,9 +72,15 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
   }, [isChecked]);
 
   const Save = () => {
+    if (!userId || !name || !nip || !email || !noTelepon || !branchName || !numRole) {
+      alert("Mohon lengkapi semua field", "", "error");
+      return;
+    }
+    
     postDataLogUserTracking();
     InsertUserNew();
   };
+  
   //! --------for API Create USer--------
 
   const insertUser = {
@@ -259,7 +266,25 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
               <div className="row">
                 <div className="col-6">
                   {" "}
-                  <div className=" row mb-2">
+                  <div className="row mb-2">
+  <div className="col-3">
+    <label htmlFor="exampleInputEmail1" className="form-label">
+      User Id <span className="text-danger">*</span>
+    </label>
+  </div>
+        <div className="col-9">
+          <input
+            type="text"
+            className="form-control"
+            id="recipient-name"
+            value={userId}
+            maxLength={25}
+            onChange={(e) => setUserId(e.target.value)}
+            required
+          />
+       </div>
+  </div>
+                  {/* <div className=" row mb-2">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
                         User Id
@@ -273,42 +298,50 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
                         onChange={(e) => setUserId(e.target.value)}
                       />
                     </div>
-                  </div>
+                  </div> */}
+                  <div className="row mb-2">
+  <div className="col-3">
+    <label htmlFor="exampleInputEmail1" className="form-label">
+      Name <span className="text-danger">*</span>
+    </label>
+  </div>
+  <div className="col-9">
+    <input
+      type="text"
+      className="form-control"
+      id="recipient-name"
+      value={name}
+      onChange={(e) => {
+        const regex = /^[a-zA-Z\s]*$/;
+        if (regex.test(e.target.value)) {
+          setName(e.target.value);
+        }
+      }}
+      required
+    />
+  </div>
+</div>
                   <div className=" row mb-2">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        Name
-                      </label>
-                    </div>
-
-                    <div className="col-9">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="recipient-name"
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className=" row mb-2">
-                    <div className="col-3">
-                      <label for="exampleInputEmail1" class="form-label">
-                        NIP
+                        NIP <span className="text-danger">*</span>
                       </label>
                     </div>
                     <div className="col-9">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
                         id="recipient-name"
+                        value={nip}
                         onChange={(e) => setNip(e.target.value)}
+                        required
                       />
                     </div>
                   </div>
                   <div className=" row mb-2">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        Email
+                        Email <span className="text-danger">*</span>
                       </label>
                     </div>
                     <div className="col-9">
@@ -317,7 +350,9 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
                         className="form-control"
                         id="recipient-name"
                         aria-describedby="emailHelp"
+                        value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        required
                       />
                     </div>
                     {/* <div id="emailHelp" className="form-text">
@@ -327,15 +362,16 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
                   <div className=" row mb-2">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        No Hp
+                        No Hp <span className="text-danger">*</span>
                       </label>
                     </div>
                     <div className="col-9">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
                         id="recipient-name"
                         onChange={(e) => setNoTelepon(e.target.value)}
+                        required
                       />
                     </div>
                   </div>
@@ -344,7 +380,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
                   <div className=" row mb-2">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        Branch
+                        Branch <span className="text-danger">*</span>
                       </label>
                     </div>
                     <div className="col-9">
@@ -352,7 +388,8 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
                         type="text"
                         className="form-control"
                         id="recipient-name"
-                        onChange={(e) => setBranchName(e.target.value)}>
+                        onChange={(e) => setBranchName(e.target.value)}
+                        required>
                         {branch.map((item, i) => {
                           return (
                             <option value={item.namevalue} key={i}>
@@ -388,7 +425,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
                   <div className=" row mb-2">
                     <div className="col-3">
                       <label for="exampleInputEmail1" className="form-label">
-                        Role
+                        Role <span className="text-danger">*</span>
                       </label>
                     </div>
 
@@ -397,7 +434,8 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
                         type="text"
                         className="form-control"
                         id="recipient-name"
-                        onChange={(e) => setRoleName(e.target.value)}>
+                        onChange={(e) => setRoleName(e.target.value)}
+                        required>
                         {role.map((item, i) => {
                           return (
                             <option value={item.namevalue} key={i}>
@@ -455,7 +493,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
               onClick={onClose}>
               Close
             </button>
-            <button type="button" className="btn btn-primary" onClick={Save}>
+            <button type="submit" className="btn btn-primary" onClick={Save}>
               Save
             </button>
           </div>
