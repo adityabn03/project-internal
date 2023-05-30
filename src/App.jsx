@@ -2,6 +2,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Demo from "./component/UserMenagement";
 import Modal from "./component/Modal";
+import DataDemo from "./component/DemoTable";
 
 import React, { useState, useEffect } from "react";
 import {
@@ -15,7 +16,7 @@ function App() {
   const [admin, setAdmin] = useState("");
 
   const [dataRoleUserDetail, setDataRoleUserDetail] = useState([]);
-  const [menu, setMenu] = useState({});
+  const [menu, setMenu] = useState([]);
   const handleDataFromChild = (data) => {
     setAdmin(data);
   };
@@ -40,9 +41,9 @@ function App() {
         />
         <Route
           path="/dashboard"
-          element={<Dashboard listmenu={menu} levelmenu={dataRoleUserDetail} />}
+          element={<Dashboard levelmenu={dataRoleUserDetail} listmenu={menu} />}
         />
-        <Route path="/User" element={<Demo />} />
+        <Route path="/Tabel" element={<DataDemo />} />
         <Route path="/Modal" element={<Modal />} />
       </Routes>
     </Router>

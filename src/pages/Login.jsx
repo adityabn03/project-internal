@@ -47,7 +47,7 @@ const Login = (props) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const [listMenuSend, setListMenuSend] = useState({});
+  const [listMenuSend, setListMenuSend] = useState([]);
 
   // Simpan data sesi
   localStorage.setItem("tokenData", JSON.stringify(token));
@@ -108,7 +108,7 @@ const Login = (props) => {
       setUserIsLogin(userLogin[0]);
       setUserDateTampungan(UserDate[0]);
       setUslPassword(cekpassword[0]);
-      alert("Berhasil");
+      // alert("Berhasil");
     } catch (errorUser) {
       alert(
         "Sorry, we have trouble getting data, please contact administrator"
@@ -128,7 +128,7 @@ const Login = (props) => {
         }
       );
 
-      alert("failLogin Berhasil");
+      // alert("failLogin Berhasil");
     } catch (error) {
       alert("reset fail login gagal");
       console.log(error);
@@ -156,9 +156,9 @@ const Login = (props) => {
       let dataUserRoleDetailApi = userRoleDetail.data.data.map((e) => {
         return e;
       });
-      console.log(dataUserRoleDetailApi);
+      // console.log(dataUserRoleDetailApi);
       setDataRoleUserDetail(dataUserRoleDetailApi);
-      alert("userRoleDetail Berhasil ke Hit");
+      // alert("userRoleDetail Berhasil ke Hit");
     } catch (error) {
       alert("reset fail login gagal");
     }
@@ -182,10 +182,10 @@ const Login = (props) => {
       });
 
       console.log(listMenu);
-      setListMenuSend(listMenu);
+      setListMenuSend(generalListMenu);
       // setListMenuSend(generalListMenu);
 
-      alert("List Menu Berhasil");
+      // alert("List Menu Berhasil");
     } catch (error) {
       alert("List Menu gagal");
     }
@@ -221,7 +221,7 @@ const Login = (props) => {
       console.log(cekIsLogin);
       setIsFristLogin(cekIsLogin[0]);
       setUserLoginDataCek();
-      alert("Test Berhasil");
+      // alert("Test Berhasil");
     } catch (error) {
       alert("Test Tidak Berhasil");
     }
@@ -254,7 +254,7 @@ const Login = (props) => {
         }
       );
 
-      alert("postDataLogUserTracking Berhasil");
+      // alert("postDataLogUserTracking Berhasil");
     } catch (error) {
       alert("postDataLogUserTracking Tidak Berhasil");
     }
@@ -276,7 +276,7 @@ const Login = (props) => {
         return e;
       });
 
-      alert("usrfaillogin Berhasil");
+      // alert("usrfaillogin Berhasil");
       setuserFaillLogin(cekFailLogin.usrfaillogin);
     } catch (error) {
       alert("Sorry, the username has not been activated or is blocked");
@@ -381,6 +381,7 @@ const Login = (props) => {
       handleMenuList();
       handleMenuLevel();
       handleSendDataToParent();
+
       navigate("/dashboard");
     } else {
       navigate("/");
@@ -407,7 +408,7 @@ const Login = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (input === captcha) {
-      alert("CAPTCHA validated successfully!");
+      // alert("CAPTCHA validated successfully!");
       getTokenApi();
     } else {
       alert("CAPTCHA validation failed. Please try again.");

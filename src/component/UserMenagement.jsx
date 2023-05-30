@@ -132,27 +132,33 @@ const UserMenagement = () => {
   //! ----batas Hit Api delete-----
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [usersPerPage, setUsersPerPage] = useState(5);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
-  // Mendapatkan index pengguna pada halaman saat ini
-  const indexOfLastUser = currentPage * usersPerPage;
-  const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+  // Menghitung indeks item pertama dan item terakhir
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  // Mengubah halaman
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // Mengambil data yang sesuai dengan halaman saat ini
+  const currentItems = users.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Mengatur nilai pencarian
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-    setCurrentPage(1);
+  // ! Menghitung jumlah total halaman
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+
+  // Mengubah halaman saat tombol halaman diklik
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Mengubah jumlah item per halaman saat pilihan entri data berubah
+  const handleEntriesChange = (event) => {
+    setItemsPerPage(Number(event.target.value));
+    setCurrentPage(1); // Mengatur halaman kembali ke halaman pertama
   };
 
   // Filter pengguna berdasarkan kata kunci pencarian
-  const filteredUsers = currentUsers.filter((user) =>
-    user.usrname.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const filteredUsers = currentUsers.filter((user) =>
+  //   user.usrname.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   //! Edit User
   const [detaiUserParam, setDetaiUserParam] = useState("adm_sky");
@@ -227,13 +233,26 @@ const UserMenagement = () => {
       <div className="card-body">
         <div className="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
           <div className="datatable-top mb-3 d-flex justify-content-between">
-            <div className="page-iittem"></div>
+            <div className="page-iittem">
+              <div className="page-item">
+                <span>Show entries:</span>
+                <select
+                  value={itemsPerPage}
+                  onChange={handleEntriesChange}
+                  className="form-control">
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+            </div>
             <div className="page-iittem">
               <input
                 type="text"
                 placeholder="Search by Name"
-                value={searchTerm}
-                onChange={handleSearch}
+                // value={searchTerm}
+                // onChange={handleSearch}
                 className="form-control"
               />
             </div>
@@ -253,7 +272,7 @@ const UserMenagement = () => {
                 </tr>
               </thead>
               <tbody className="text-gray-600 text-sm font-light border-b">
-                {filteredUsers.map((user) => (
+                {currentItems.map((user) => (
                   <tr
                     key={user.usrid}
                     className=" transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 white:hover:bg-neutral-600">
@@ -295,25 +314,46 @@ const UserMenagement = () => {
                 ))}
               </tbody>
             </table>
+
             {/* Pagination */}
             <nav className="mt-2">
               <div className="pagination-item d-flex justify-content-between">
                 <div className="page-1"></div>
                 <div className="page-2">
-                  {" "}
-                  <ul className="pagination">
-                    {users.map((user, index) => (
-                      <li className="page-item" key={index}>
+                  <nav aria-label="Page navigation example">
+                    <ul class="inline-flex -space-x-px">
+                      <li>
                         <button
-                          className={`page-link ${
-                            currentPage === index + 1 ? "active" : ""
-                          }`}
-                          onClick={() => paginate(index + 1)}>
-                          {index + 1}
+                          className="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}>
+                          Previous
                         </button>
                       </li>
-                    ))}
-                  </ul>
+                      <li>
+                        {Array.from(
+                          { length: totalPages },
+                          (_, index) => index + 1
+                        ).map((pageNumber) => (
+                          <button
+                            className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                            key={pageNumber}
+                            onClick={() => handlePageChange(pageNumber)}
+                            disabled={pageNumber === currentPage}>
+                            {pageNumber}
+                          </button>
+                        ))}
+                      </li>
+                      <li>
+                        <button
+                          className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPages}>
+                          Next
+                        </button>
+                      </li>
+                    </ul>
+                  </nav>
                 </div>
               </div>
             </nav>
