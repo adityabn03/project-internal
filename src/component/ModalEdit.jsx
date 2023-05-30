@@ -7,21 +7,87 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { BiReset } from "react-icons/bi";
-
-const Modal = ({ isOpen, onClose, currentUser, reload }) => {
+import md5 from "js-md5";
+const Modal = ({
+  isOpen,
+  onClose,
+  currentUser,
+  dropdownBranch,
+  dropdownSN,
+  dropdownRole,
+  reload,
+}) => {
   const [token, setToken] = useState();
   const [users, setUser] = useState(currentUser);
-  console.log(users);
   const [isChecked, setIsChecked] = useState(false);
-  const [branch, setBranch] = useState([]);
-  const [superVisior, setSupervisior] = useState([]);
-  const [role, setRole] = useState([]);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [formError, setFormError] = useState(false);
+  const [status, setStatus] = useState("");
+  const [password, setPassword] = useState("");
+  const pass = md5(password);
+  const [passwordMd5, setPasswordMd5] = useState(pass);
+  const passwordDefult = "5fec4ba8376f207d1ff2f0cac0882b01";
 
+  console.log(password);
+  console.log(passwordMd5);
+  console.log(pass);
+
+  useEffect(() => {
+    if (password === "" || password === null) {
+      setPasswordMd5("");
+    }
+  }, [password]);
+
+  useEffect(() => {
+    setPasswordMd5("");
+  }, [onClose]);
+
+  const isCheckedFrist = users.usrstatus;
+  console.log(isCheckedFrist);
+  console.log(isChecked);
+  const [branch, setBranch] = useState(dropdownBranch);
+  const [superVisior, setSupervisior] = useState(dropdownSN);
+  const [role, setRole] = useState(dropdownRole);
+  const [startDate, setStartDate] = useState(null);
+
+  const initialDateString = users.usrefectivedate;
+  useEffect(() => {
+    if (initialDateString) {
+      const initialDate = new Date(initialDateString);
+      setStartDate(initialDate);
+    }
+  }, [initialDateString]);
+
+  const handleDateChange = (date) => {
+    setStartDate(date);
+  };
+
+  useEffect(() => {
+    if (isCheckedFrist === 1) {
+      setIsChecked(true);
+    } else if (isCheckedFrist === 0) {
+      setIsChecked(false);
+    }
+  }, [users]);
+
+  useEffect(() => {
+    if (isChecked === true) {
+      setStatus("True");
+    } else {
+      setStatus("False");
+    }
+  }, [isChecked]);
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
 
   const [tampungDate, settampungDate] = useState(users.usrefectivedate);
+  var [tanggalString, settanggalString] = useState(tampungDate);
+  var tanggal = new Date(tanggalString);
+  console.log(tanggal);
+
+  useEffect(() => {
+    settanggalString(tampungDate);
+  }, [tampungDate]);
 
   const getTokenApi = () => {
     getToken().then((e) => {
@@ -32,28 +98,19 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   useEffect(() => {
     getTokenApi();
     setUser(currentUser);
-    DropDown();
-    DropDownSv();
-    DropDownRl();
   }, [currentUser]);
+
+  console.log(users.usruserid);
+
+  // useEffect(() => {
+  //   DropDown();
+  //   DropDownSv();
+  //   DropDownRl();
+  // }, [users]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-  
-    if (name === "usrname"  ) {
-      // Validasi hanya huruf alfabet atau string kosong
-      const alphabetRegex = /^[A-Za-z\s]*$/; // Regular expression for alphabet and space
-      if (value !== "" && !alphabetRegex.test(value)) {
-        return; // Jika input tidak valid, hentikan proses selanjutnya
-      }
-    } else if (name === "usrnip" || name === "usrnotlp") {
-      // Validasi hanya angka atau string kosong
-      const numberRegex = /^\d*$/; // Regular expression for numbers
-      if (value !== "" && !numberRegex.test(value)) {
-        return; // Jika input tidak valid, hentikan proses selanjutnya
-      }
-    }
-  
+
     setUser((prevState) => ({
       ...prevState,
       [name]: value,
@@ -68,26 +125,27 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
     p_notlp: users.usrnotlp,
     p_branchcode: users.usrbranch,
     p_spv: users.usrsupervisor,
-    p_position: users.usrposition,
-    p_acclevel: "administrator",
-    p_efectivedate: "2019-06-03",
-    p_status: "True",
+    p_position: "area",
+    p_acclevel: users.usraccesslevel,
+    p_efectivedate: startDate,
+    p_status: status,
     p_usr: "bani",
-    p_defaultpwd: "",
+    p_defaultpwd: passwordMd5,
     p_logid: "13",
   };
 
+  const Submit = () => {
+    EditUser();
+  };
   const EditUser = async () => {
-    // Validasi input sebelum mengirim permintaan POST
     if (!users.usrname || !users.usrnip) {
       Swal.fire("Mohon lengkapi semua field", "", "error");
       return;
     }
-
     try {
       await axios.post(
         "http://116.206.196.65:30983/skycore/User/postJDataEditRecord",
-        JSON.stringify(users),
+        dataEditUser,
         {
           headers: {
             "Content-Type": "application/json",
@@ -97,102 +155,12 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
       );
 
       Swal.fire("Save Berhasil", "", "success");
+
       reload();
       onClose();
     } catch (error) {
       console.log(error);
     }
-  };
-
-  //!--- Dropdown ddl branch------
-  const hitDropdown = {
-    type: "branch",
-    usr: "crm_admin",
-  };
-
-  const DropDown = async () => {
-    try {
-      const listDropdown = await axios.post(
-        "http://116.206.196.65:30983/skycore/User/postJDataCallParameterDDL",
-        JSON.stringify(hitDropdown),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const cekData = listDropdown.data.data.map((e) => {
-        return e;
-      });
-
-      // console.l.usrnotlp
-      setBranch(cekData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //! dropdown ddl supervisor
-  const hitDropdownSv = {
-    type: "supervisor",
-    usr: "crm_admin",
-  };
-
-  const DropDownSv = async () => {
-    try {
-      const listDropdown = await axios.post(
-        "http://116.206.196.65:30983/skycore/User/postJDataCallParameterDDL",
-        JSON.stringify(hitDropdownSv),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const cekData = listDropdown.data.data.map((e) => {
-        return e;
-      });
-
-      // console.log(cekData);
-      setSupervisior(cekData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //! dropdown ddl Role
-  const hitDropdownRl = {
-    type: "level",
-    usr: "crm_admin",
-  };
-
-  const DropDownRl = async () => {
-    try {
-      const listDropdown = await axios.post(
-        "http://116.206.196.65:30983/skycore/User/postJDataCallParameterDDL",
-        JSON.stringify(hitDropdownRl),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const cekData = listDropdown.data.data.map((e) => {
-        return e;
-      });
-
-      console.log(cekData);
-      setRole(cekData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
   };
 
   const checkBoxStyle = {
@@ -213,7 +181,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
               aria-label="Close"
               onClick={onClose}></button>
           </div>
-          <div className="modal_body">
+          <div className="modal-body">
             <form>
               <div className="row">
                 <div className="col-6">
@@ -243,13 +211,14 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         Name <span className="text-danger">*</span>
                       </label>
                     </div>
+
                     <div className="col-9">
                       <input
                         type="text"
                         className="form-control"
                         value={users.usrname}
                         name="usrname"
-                        onChange={handleInputChange}         
+                        onChange={handleInputChange}
                         required
                       />
                     </div>
@@ -262,7 +231,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                     </div>
                     <div className="col-9">
                       <input
-                        type="number"
+                        type="text"
                         className="form-control"
                         id="recipient-name"
                         value={users.usrnip}
@@ -297,7 +266,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                     </div>
                     <div className="col-9">
                       <input
-                        type="number"
+                        type="text"
                         className="form-control"
                         id="recipient-name"
                         value={users.usrnotlp}
@@ -312,7 +281,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                   <div className=" row mb-2">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        Branch
+                        Branch <span className="text-danger">*</span>
                       </label>
                     </div>
                     <div className="col-9">
@@ -339,7 +308,6 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         Supervisor Name
                       </label>
                     </div>
-
                     <div className="col-9">
                       <select
                         type="text"
@@ -361,12 +329,13 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                   <div className=" row mb-1">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        Role
+                        Role <span className="text-danger">*</span>
                       </label>
                     </div>
                     <div className="col-9">
                       <select
                         type="text"
+                        required
                         className="form-control"
                         id="recipient-name"
                         name="usraccesslevel"
@@ -407,32 +376,41 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                     <div className="col-9">
                       <DatePicker
                         className="form-control"
-                        value={users.usrefectivedate}
+                        selected={startDate}
                         name="usrefectivedate"
-                        onChange={(event) => handleInputChange(event, users.usrefectivedate)}
-                        
+                        // onChange={handleInputChange}
+                        onChange={handleDateChange}
+                        dateFormat="yyyy/MM/dd"
+
                         // onChange={(date) => setStartDate(date)}
                       />
                     </div>
                   </div>
+
                   <div className=" row mb-1">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
                         Password
                       </label>
                     </div>
-                    <div className="col-9">
+                    <div className="col-9 input-group">
                       <input
-                        type="text"
+                        type="password"
                         className="form-control"
-                        id="recipient-name"
-                        disabled
+                        onChange={(e) => setPassword(e.target.value)}
                       />
+                      <button
+                        type="button"
+                        onClick={() => setPasswordMd5(passwordDefult)}
+                        className="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
+                        <BiReset />
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-            
+            </form>
+          </div>
           <div className="modal-footer">
             <button
               type="button"
@@ -441,15 +419,9 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
               onClick={onClose}>
               Close
             </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              onClick={EditUser}
-              >
+            <button type="submit" className="btn btn-primary" onClick={Submit}>
               Save changes
             </button>
-          </div>
-          </form>
           </div>
         </div>
       </div>
@@ -458,321 +430,3 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
 };
 
 export default Modal;
-
-// import React, { useEffect, useState } from "react";
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import Swal from "sweetalert2";
-// import axios from "axios";
-// import { getToken } from "../API/api";
-
-// const ModalEdit = ({ isOpen, onClose, currentUser, reload }) => {
-//   const [token, setToken] = useState();
-//   const [detaiUserParam, setDetaiUserParam] = useState(currentUser);
-
-//   console.log(detaiUserParam);
-//   const [users, setUser] = useState();
-//   console.log(users);
-//   const [isChecked, setIsChecked] = useState(false);
-
-//   const [userId, setUserId] = useState("false");
-//   const [name, setName] = useState("");
-
-//   const getTokenApi = () => {
-//     getToken().then((e) => {
-//       setToken(e);
-//     });
-//   };
-
-//   useEffect(() => {
-//     getTokenApi();
-//     setDetaiUserParam(currentUser);
-//     getUserDetail();
-//   }, [currentUser]);
-
-//   const handleInputChange = (event) => {
-//     const { name, value } = event.target;
-//     setUser((prevState) => ({
-//       ...prevState,
-//       [name]: value,
-//     }));
-//   };
-
-//   const getUserDetail = async () => {
-//     try {
-//       const listUserDetail = await axios.get(
-//         "http://116.206.196.65:30983/skycore/User/getDataUser/" +
-//           detaiUserParam,
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: `Bearer ${token}`,
-//           },
-//         }
-//       );
-
-//       const cekData = listUserDetail.data.data.map((e) => {
-//         return e;
-//       });
-//       console.log(cekData);
-//       setUser(cekData);
-//     } catch (errorUser) {
-//       alert(errorUser);
-//       console.log(errorUser);
-//     }
-//   };
-
-//   const dataEditUser = {
-//     p_usrid: userId,
-//     p_name: name,
-//     p_nip: "78922222",
-//     p_email: "crm_test2222@gmail.com",
-//     p_notlp: "08676899000",
-//     p_branchcode: "1",
-//     p_spv: "crm_admin",
-//     p_position: "area",
-//     p_acclevel: "administrator",
-//     p_efectivedate: "2019-06-03 00:00:00.000",
-//     p_status: "true",
-//     p_usr: "bani",
-//     p_defaultpwd: "",
-//     p_logid: "13",
-//   };
-
-//   const EditUser = async () => {
-//     try {
-//       await axios.post(
-//         "http://116.206.196.65:30983/skycore/User/postJDataEditRecord",
-//         JSON.stringify(dataEditUser),
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: `Bearer ${token}`,
-//           },
-//         }
-//       );
-
-//       Swal.fire("Save Berhasil", "", "success");
-//       reload();
-//       onClose();
-//     } catch (error) {
-//       alert(error);
-//     }
-//   };
-
-//   const handleCheckboxChange = () => {
-//     setIsChecked(!isChecked);
-//   };
-
-//   const checkBoxStyle = {
-//     margin: 0,
-//   };
-//   if (!isOpen) return null;
-//   return (
-//     <div className="modal" tabindex="-1">
-//       <div className="modal-dialog">
-//         <div className="modal-content">
-//           <div className="modal-header">
-//             <h5 className="modal-title">User Edit</h5>
-//             <button
-//               type="button"
-//               className="btn-close"
-//               data-bs-dismiss="modal"
-//               aria-label="Close"
-//               onClick={onClose}></button>
-//           </div>
-//           <div className="modal-body">
-//             <form>
-//               <div className="row">
-//                 <div className="col-6">
-//                   {" "}
-//                   <div className=" row mb-1">
-//                     <div className="col-3">
-//                       <label for="exampleInputEmail1" class="form-label">
-//                         User Id
-//                       </label>
-//                     </div>
-//                     <div className="col-9">
-//                       <input
-//                         type="text"
-//                         className="form-control"
-//                         id="recipient-name"
-//                         // value={users[0].usruserid}
-//                         // onChange={handleInputChange}
-//                       />
-//                     </div>
-//                   </div>
-//                   <div className=" row mb-1">
-//                     <div className="col-3">
-//                       <label for="exampleInputEmail1" class="form-label">
-//                         Name
-//                       </label>
-//                     </div>
-
-//                     <div className="col-9">
-//                       <input
-//                         type="text"
-//                         name="name"
-//                         className="form-control"
-//                         id="recipient-name"
-//                         value={users[0].usrname}
-//                         onChange={handleInputChange}
-//                       />
-//                     </div>
-//                   </div>
-//                   <div className=" row mb-1">
-//                     <div className="col-3">
-//                       <label for="exampleInputEmail1" class="form-label">
-//                         NIP
-//                       </label>
-//                     </div>
-//                     <div className="col-9">
-//                       <input
-//                         type="text"
-//                         className="form-control"
-//                         id="recipient-name"
-//                       />
-//                     </div>
-//                   </div>
-//                   <div className=" row mb-1">
-//                     <div className="col-3">
-//                       <label for="exampleInputEmail1" class="form-label">
-//                         Email
-//                       </label>
-//                     </div>
-//                     <div className="col-9">
-//                       <input
-//                         type="text"
-//                         className="form-control"
-//                         id="recipient-name"
-//                       />
-//                     </div>
-//                   </div>
-//                   <div className=" row mb-1">
-//                     <div className="col-3">
-//                       <label for="exampleInputEmail1" class="form-label">
-//                         No Hp
-//                       </label>
-//                     </div>
-//                     <div className="col-9">
-//                       <input
-//                         type="text"
-//                         className="form-control"
-//                         id="recipient-name"
-//                       />
-//                     </div>
-//                   </div>
-//                 </div>
-//                 <div className="col-6">
-//                   <div className=" row mb-1">
-//                     <div className="col-3">
-//                       <label for="exampleInputEmail1" class="form-label">
-//                         Branch
-//                       </label>
-//                     </div>
-//                     <div className="col-9">
-//                       <input
-//                         type="text"
-//                         className="form-control"
-//                         id="recipient-name"
-//                       />
-//                     </div>
-//                   </div>
-//                   <div className=" row mb-1">
-//                     <div className="col-3">
-//                       <label for="exampleInputEmail1" class="form-label">
-//                         Supervisor Name
-//                       </label>
-//                     </div>
-
-//                     <div className="col-9">
-//                       <input
-//                         type="text"
-//                         className="form-control"
-//                         id="recipient-name"
-//                       />
-//                     </div>
-//                   </div>
-//                   <div className=" row mb-1">
-//                     <div className="col-3">
-//                       <label for="exampleInputEmail1" class="form-label">
-//                         Role
-//                       </label>
-//                     </div>
-//                     <div className="col-9">
-//                       <input
-//                         type="text"
-//                         className="form-control"
-//                         id="recipient-name"
-//                       />
-//                     </div>
-//                   </div>
-//                   <div className=" row mb-1">
-//                     <div className="col-3">
-//                       <label for="exampleInputEmail1" class="form-label">
-//                         Status
-//                       </label>
-//                     </div>
-//                     <div className="col-9">
-//                       <input
-//                         class="form-check-input mt-0"
-//                         type="checkbox"
-//                         style={checkBoxStyle}
-//                         checked={isChecked}
-//                         onChange={handleCheckboxChange}
-//                       />
-//                     </div>
-//                   </div>
-//                   <div className=" row mb-1">
-//                     <div className="col-3">
-//                       <label for="exampleInputEmail1" class="form-label">
-//                         Effective Date
-//                       </label>
-//                     </div>
-//                     <div className="col-9">
-//                       <input
-//                         type="text"
-//                         className="form-control"
-//                         id="recipient-name"
-//                       />
-//                     </div>
-//                   </div>
-//                   <div className=" row mb-1">
-//                     <div className="col-3">
-//                       <label for="exampleInputEmail1" class="form-label">
-//                         Password
-//                       </label>
-//                     </div>
-//                     <div className="col-9">
-//                       <input
-//                         type="text"
-//                         className="form-control"
-//                         id="recipient-name"
-//                       />
-//                     </div>
-//                   </div>
-//                 </div>
-//               </div>
-//             </form>
-//           </div>
-//           <div className="modal-footer">
-//             <button
-//               type="button"
-//               className="btn btn-secondary"
-//               data-bs-dismiss="modal"
-//               onClick={onClose}>
-//               Close
-//             </button>
-//             <button
-//               type="button"
-//               className="btn btn-primary"
-//               onClick={EditUser}>
-//               Save changes
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ModalEdit;

@@ -28,7 +28,7 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
   const [superVisiorName, setSupervisiorName] = useState("");
   const [role, setRole] = useState([]);
   const [roleName, setRoleName] = useState();
-  
+
   const numRole = parseInt(roleName);
 
   console.log(numRole);
@@ -72,15 +72,28 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
   }, [isChecked]);
 
   const Save = () => {
-    if (!userId || !name || !nip || !email || !noTelepon || !branchName || !numRole) {
-      alert("Mohon lengkapi semua field", "", "error");
+    if (
+      !userId ||
+      !name ||
+      !nip ||
+      !email ||
+      !noTelepon ||
+      !branchName ||
+      !numRole
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        footer: '<a href="">Why do I have this issue?</a>',
+      });
       return;
     }
-    
+
     postDataLogUserTracking();
     InsertUserNew();
   };
-  
+
   //! --------for API Create USer--------
 
   const insertUser = {
@@ -267,23 +280,25 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
                 <div className="col-6">
                   {" "}
                   <div className="row mb-2">
-  <div className="col-3">
-    <label htmlFor="exampleInputEmail1" className="form-label">
-      User Id <span className="text-danger">*</span>
-    </label>
-  </div>
-        <div className="col-9">
-          <input
-            type="text"
-            className="form-control"
-            id="recipient-name"
-            value={userId}
-            maxLength={25}
-            onChange={(e) => setUserId(e.target.value)}
-            required
-          />
-       </div>
-  </div>
+                    <div className="col-3">
+                      <label
+                        htmlFor="exampleInputEmail1"
+                        className="form-label">
+                        User Id <span className="text-danger">*</span>
+                      </label>
+                    </div>
+                    <div className="col-9">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="recipient-name"
+                        value={userId}
+                        maxLength={25}
+                        onChange={(e) => setUserId(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
                   {/* <div className=" row mb-2">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
@@ -300,27 +315,29 @@ const Modal = ({ isOpen, onClose, reload, currentUser }) => {
                     </div>
                   </div> */}
                   <div className="row mb-2">
-  <div className="col-3">
-    <label htmlFor="exampleInputEmail1" className="form-label">
-      Name <span className="text-danger">*</span>
-    </label>
-  </div>
-  <div className="col-9">
-    <input
-      type="text"
-      className="form-control"
-      id="recipient-name"
-      value={name}
-      onChange={(e) => {
-        const regex = /^[a-zA-Z\s]*$/;
-        if (regex.test(e.target.value)) {
-          setName(e.target.value);
-        }
-      }}
-      required
-    />
-  </div>
-</div>
+                    <div className="col-3">
+                      <label
+                        htmlFor="exampleInputEmail1"
+                        className="form-label">
+                        Name <span className="text-danger">*</span>
+                      </label>
+                    </div>
+                    <div className="col-9">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="recipient-name"
+                        value={name}
+                        onChange={(e) => {
+                          const regex = /^[a-zA-Z\s]*$/;
+                          if (regex.test(e.target.value)) {
+                            setName(e.target.value);
+                          }
+                        }}
+                        required
+                      />
+                    </div>
+                  </div>
                   <div className=" row mb-2">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
