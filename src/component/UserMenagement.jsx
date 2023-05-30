@@ -5,6 +5,9 @@ import Modal from "./Modal";
 import ModalEdit from "./ModalEdit";
 import axios from "axios";
 import Swal from "sweetalert2";
+import DataTable from 'datatables.net';
+import $ from 'jquery';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 // import { BsFillPersonPlusFill } from "react-icons/bs";
 // import { ImSearch } from "react-icons/im";
 
@@ -42,17 +45,20 @@ const UserMenagement = () => {
           },
         }
       );
-
+  
       const cekData = listUser.data.data.map((e) => {
         return e;
       });
       console.log(cekData);
       setUsers(cekData);
+  
+      // Inisialisasi DataTable setelah mendapatkan data
+      $('#dataTable').DataTable();
     } catch (errorUser) {
       alert(errorUser);
     }
   };
-
+  
   // ! nanti atur secara dinamis
   const dataLogUserTracking = {
     plcd: "ua",
@@ -156,9 +162,11 @@ const UserMenagement = () => {
   };
 
   // Filter pengguna berdasarkan kata kunci pencarian
-  // const filteredUsers = currentUsers.filter((user) =>
-  //   user.usrname.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+
+  const filteredUsers = currentUsers.filter((user) =>
+  user.usrname.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
 
   //! Edit User
   const [detaiUserParam, setDetaiUserParam] = useState("adm_sky");
@@ -217,7 +225,18 @@ const UserMenagement = () => {
     setIsModalOpenEdit(false);
   };
 
+  const handleRowsPerPageChange = (event) => {
+    setUsersPerPage(parseInt(event.target.value));
+    setCurrentPage(1);
+  };
+
   return (
+  
+        <div class="py-8">
+            <div>
+                <h2 class="text-2xl font-semibold leading-tight">Users</h2>
+            </div>
+
     <div className="card shadow mb-4">
       <div className="card-header d-flex justify-content-between mb-2">
         <div className="test">

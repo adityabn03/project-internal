@@ -5,6 +5,7 @@ import Skysite from "../assets/images/LogoSky.png";
 import "../assets/css/Dashboard.css";
 import Demo from "../component/UserMenagement";
 import Rule from "../component/RuleMenagement";
+import Audit from "../component/auditTrail"
 import { IconName } from "react-icons/ri";
 import "../assets/css/modal.css";
 import axios from "axios";
@@ -40,6 +41,7 @@ const Dashboard = ({ listmenu, levelmenu, user }) => {
             {/* <button
                 className="fa fa-bars"
                 onClick={() => setSideBarHide(false)}></button> */}
+
           </a>
           <ul
             className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
@@ -75,6 +77,74 @@ const Dashboard = ({ listmenu, levelmenu, user }) => {
           </ul>
         </div>
 
+            </a>
+            <ul
+              className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+              id="accordionSidebar">
+              {/* <li
+                className="nav-item"
+                dangerouslySetInnerHTML={{ __html: html }}></li> */}
+              <li className="py-2 px-4 hover:bg-gray-700">
+                {" "}
+                <a
+                  class=" text-white-500 flex items-center justify-between py-1.5 px-4 rounded cursor-pointer"
+                  onClick={() => setruleMenagement(false)}>
+                  <span class="flex items-center space-x-2">
+                    <span className="font-bold">User Menagement</span>
+                  </span>
+                </a>
+              </li>
+
+              <li className="py-2 px-4 hover:bg-gray-700">
+                {" "}
+                <a
+                  class=" text-white-500 flex items-center justify-between py-1.5 px-4 rounded cursor-pointer"
+                  onClick={() => setruleMenagement(true)}>
+                  <span class="flex items-center space-x-2">
+                    <span className="font-bold">Role Menagement</span>
+                  </span>
+                </a>
+              </li>
+
+              {/* <li className="py-2 px-4 hover:bg-gray-700">
+                {" "}
+                <a
+                  class=" text-white-500 flex items-center justify-between py-1.5 px-4 rounded cursor-pointer"
+                  onClick={() => setruleMenagement(false)}>
+                  <span class="flex items-center space-x-2">
+                    <span className="font-bold">Audit Trail</span>
+                  </span>
+                </a>
+              </li> */}
+            </ul>
+          </div>
+        ) : (
+          <div className="test-sidebar-site">
+            <a
+              className="sidebar-brand d-flex align-items-center justify-content-center"
+              href="index.html">
+              <div className="sidebar-brand-icon rotate-n-15">
+                {/* <i className="fas fa-laugh-wink"></i> */}
+              </div>
+              <div className="sidebar-brand-text mx-3 shadow">
+                <img src={Skysite} alt="" className="logoSkySite" />
+              </div>
+
+              {/* <button
+                className="fa fa-bars"
+                onClick={() => setSideBarHide(true)}></button> */}
+            </a>
+            <ul
+              className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+              id="accordionSidebar">
+              {/* <li
+                className="nav-item"
+                dangerouslySetInnerHTML={{ __html: html1 }}></li> */}
+            </ul>
+          </div>
+        )}
+
+
         <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
             <nav className="navbar navbar-expand navbar-light bg-white topbar mb-2 static-top shadow">
@@ -97,7 +167,13 @@ const Dashboard = ({ listmenu, levelmenu, user }) => {
                 </li>
               </ul>
             </nav>
+
             <Demo />
+
+            {/* <Demo /> */}
+
+            {ruleMenagement ? (ruleMenagement === true ? <Rule /> : <Audit />) : <Demo />}
+
           </div>
 
           <footer className="sticky-footer bg-white">
