@@ -238,7 +238,7 @@ const UserMenagement = () => {
 
             {/* <input type="number" /> */}
           </div>
-          <div className="datatable-container">
+          <div className="datatable-container px-2">
             <table
               className="table table-bordered dataTable"
               id="dataTable"
