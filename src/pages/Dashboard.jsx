@@ -7,6 +7,7 @@ import Skysite from "../assets/images/LogoSky.png";
 import "../assets/css/Dashboard.css";
 import Demo from "../component/UserMenagement";
 import Rule from "../component/RuleMenagement";
+import Audit from "../component/auditTrail"
 import { IconName } from "react-icons/ri";
 import "../assets/css/modal.css";
 import axios from "axios";
@@ -347,6 +348,17 @@ const Dashboard = ({ listmenu, levelmenu, user }) => {
                   </span>
                 </a>
               </li>
+
+              {/* <li className="py-2 px-4 hover:bg-gray-700">
+                {" "}
+                <a
+                  class=" text-white-500 flex items-center justify-between py-1.5 px-4 rounded cursor-pointer"
+                  onClick={() => setruleMenagement(false)}>
+                  <span class="flex items-center space-x-2">
+                    <span className="font-bold">Audit Trail</span>
+                  </span>
+                </a>
+              </li> */}
             </ul>
           </div>
         ) : (
@@ -437,7 +449,7 @@ const Dashboard = ({ listmenu, levelmenu, user }) => {
             </nav>
             {/* <Demo /> */}
 
-            {ruleMenagement === false ? <Demo /> : <Rule />}
+            {ruleMenagement ? (ruleMenagement === true ? <Rule /> : <Audit />) : <Demo />}
           </div>
 
           <footer className="sticky-footer bg-white">
