@@ -2,6 +2,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Demo from "./component/UserMenagement";
 import Modal from "./component/Modal";
+import Audit from "./component/auditTrail"
 
 import React, { useState, useEffect } from "react";
 import {
@@ -16,7 +17,6 @@ function App() {
 
   const [dataRoleUserDetail, setDataRoleUserDetail] = useState([]);
   const [menu, setMenu] = useState({});
-
   const handleDataFromChild = (data) => {
     setAdmin(data);
   };
@@ -45,6 +45,7 @@ function App() {
         />
         <Route path="/User" element={<Demo />} />
         <Route path="/Modal" element={<Modal />} />
+        <Route path="/audit" element={<Audit />} />
       </Routes>
     </Router>
   );

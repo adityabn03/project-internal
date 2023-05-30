@@ -5,11 +5,16 @@ import Modal from "./Modal";
 import ModalEdit from "./ModalEdit";
 import axios from "axios";
 import Swal from "sweetalert2";
+import DataTable from 'datatables.net';
+import $ from 'jquery';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 // import { BsFillPersonPlusFill } from "react-icons/bs";
 // import { ImSearch } from "react-icons/im";
 
 const UserMenagement = () => {
   const [users, setUsers] = useState([]);
+
+  console.log(users);
   const [status, setStatus] = useState();
 
   const [currentUser, setCurrentUser] = useState(users);
@@ -40,17 +45,20 @@ const UserMenagement = () => {
           },
         }
       );
-
+  
       const cekData = listUser.data.data.map((e) => {
         return e;
       });
       console.log(cekData);
       setUsers(cekData);
+  
+      // Inisialisasi DataTable setelah mendapatkan data
+      $('#dataTable').DataTable();
     } catch (errorUser) {
       alert(errorUser);
     }
   };
-
+  
   // ! nanti atur secara dinamis
   const dataLogUserTracking = {
     plcd: "ua",
@@ -149,8 +157,8 @@ const UserMenagement = () => {
 
   // Filter pengguna berdasarkan kata kunci pencarian
   const filteredUsers = currentUsers.filter((user) =>
-    user.usrname.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  user.usrname.toLowerCase().includes(searchTerm.toLowerCase())
+);
 
   //! Edit User
   const [detaiUserParam, setDetaiUserParam] = useState("adm_sky");
@@ -209,11 +217,22 @@ const UserMenagement = () => {
     setIsModalOpenEdit(false);
   };
 
+  const handleRowsPerPageChange = (event) => {
+    setUsersPerPage(parseInt(event.target.value));
+    setCurrentPage(1);
+  };
+
   return (
+  
+        <div class="py-8">
+            <div>
+                <h2 class="text-2xl font-semibold leading-tight">Users</h2>
+            </div>
+
     <div className="card shadow mb-4">
       <div className="card-header d-flex justify-content-between mb-2">
         <div className="test">
-          <h4> User Menagement</h4>
+          <h4> User Management</h4>
         </div>
         <div className="btn-new">
           <button className="btn btn-primary" onClick={openModal}>
@@ -229,7 +248,7 @@ const UserMenagement = () => {
             <div className="page-iittem">
               <input
                 type="text"
-                placeholder="Cari pengguna..."
+                placeholder="Search by Name"
                 value={searchTerm}
                 onChange={handleSearch}
                 className="form-control"
@@ -238,30 +257,39 @@ const UserMenagement = () => {
 
             {/* <input type="number" /> */}
           </div>
-          <div className="datatable-container px-2">
-            <table
-              className="table table-bordered dataTable"
-              id="dataTable"
-              cellSpacing="0">
+          <div className="datatable-container">
+            <table className="min-w-max w-full table-auto">
               <thead>
-                <tr>
-                  <th>User Id</th>
-                  <th>Name</th>
-                  <th>Nip</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Action</th>
+                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                  <th className="py-3 px-6 text-left">User Id</th>
+                  <th className="py-3 px-6 text-left">Name</th>
+                  <th className="py-3 px-6 text-center">Nip</th>
+                  <th className="py-3 px-6 text-center">Role</th>
+                  <th className="py-3 px-6 text-center">Status</th>
+                  <th className="py-3 px-6 text-center">Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-gray-600 text-sm font-light border-b">
                 {filteredUsers.map((user) => (
-                  <tr key={user.usrid}>
-                    <td>{user.usruserid}</td>
-                    <td>{user.usrname}</td>
-                    <td>{user.usrnip}</td>
-                    <td>{user.usrsupervisor}</td>
-                    <td>{user.usrstatusformat}</td>
-                    <td>
+                  <tr
+                    key={user.usrid}
+                    className=" transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 white:hover:bg-neutral-600">
+                    <td className="py-3 px-6 text-left whitespace-nowrap font-semibold">
+                      {user.usruserid}
+                    </td>
+                    <td className="py-3 px-6 text-left  whitespace-nowrap font-semibold">
+                      {user.usrname}
+                    </td>
+                    <td className="py-3 px-6 text-center whitespace-nowrap font-semibold">
+                      {user.usrnip}
+                    </td>
+                    <td className="py-3 px-6 text-center whitespace-nowrap font-semibold">
+                      {user.usraccesslevel}
+                    </td>
+                    <td className="py-3 px-6 text-center  whitespace-nowrap font-semibold ">
+                      {user.usrstatusformat}
+                    </td>
+                    <td className="py-3 px-6 text-center  whitespace-nowrap ">
                       <button
                         className="btn btn-success btn-sm"
                         onClick={() => editUser(user.usruserid)}>
@@ -272,7 +300,7 @@ const UserMenagement = () => {
                         onClick={() => handleDeleteUser(user.usruserid)}>
                         Hapus
                       </button>
-                      {user.usrstatusformat === "Active" ? (
+                      {user.usrstatusformat !== "Active" ? (
                         <button className="btn btn-warning btn-sm ml-1">
                           Active
                         </button>
@@ -285,7 +313,7 @@ const UserMenagement = () => {
               </tbody>
             </table>
             {/* Pagination */}
-            <nav>
+            <nav className="mt-2">
               <div className="pagination-item d-flex justify-content-between">
                 <div className="page-1"></div>
                 <div className="page-2">
@@ -311,16 +339,9 @@ const UserMenagement = () => {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal} reload={getUserList}>
-        <button onClick={closeModal}>Tutup Modal</button>
+        {/* <button onClick={closeModal}>Tutup Modal</button> */}
       </Modal>
 
-      {/* <ModalEdit
-        isOpen={isModalOpenEdit}
-        onClose={closeModalEdit}
-        currentUser={userEdit}
-        demo={getUserDetail}
-        reload={getUserList}
-      /> */}
       {userEdit !== undefined ? (
         <ModalEdit
           isOpen={isModalOpenEdit}
@@ -331,18 +352,6 @@ const UserMenagement = () => {
       ) : (
         <></>
       )}
-
-      {/*  modal edit */}
-
-      {/* {isModalOpenEdit ? (
-        <ModalEdit
-          isOpen={isModalOpenEdit}
-          onClose={closeModalEdit}
-          currentUser={userEdit}
-        />
-      ) : (
-        <></>
-      )} */}
     </div>
   );
 };

@@ -316,7 +316,7 @@ const Login = (props) => {
           console.log(4);
           if (userDateTampungan !== "") {
             console.log(5);
-            if (uslPassword !== "") {
+            if (hashedPassword === uslPassword) {
               console.log(6);
               resetFailLogin();
               getDataUserRoleDetail();
@@ -324,6 +324,7 @@ const Login = (props) => {
               getIsFristLogin();
             } else if (hashedPassword !== uslPassword) {
               //hit API UserFalLogin
+              alert("password Salah");
               faillLogin();
               // resetFailLogin();
             }
@@ -393,7 +394,7 @@ const Login = (props) => {
     const timer = setTimeout(() => {
       setCaptcha(generateCaptcha());
       setInput("");
-      //dalam 3 detik expired akan di set menjadi true
+      // dalam 3 detik expired akan di set menjadi true
       setExpired(true);
     }, 30000);
     return () => clearTimeout(timer);
@@ -405,7 +406,7 @@ const Login = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (input.toUpperCase() === captcha.toUpperCase()) {
+    if (input === captcha) {
       alert("CAPTCHA validated successfully!");
       getTokenApi();
     } else {

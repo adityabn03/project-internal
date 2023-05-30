@@ -12,22 +12,16 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   const [token, setToken] = useState();
   const [users, setUser] = useState(currentUser);
   console.log(users);
-
   const [isChecked, setIsChecked] = useState(false);
   const [branch, setBranch] = useState([]);
   const [superVisior, setSupervisior] = useState([]);
   const [role, setRole] = useState([]);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [formError, setFormError] = useState(false);
 
-  // const [ckeck, setCheck] = useState();
 
-  // console.log(users.usrstatus);
-  // console.log(users);
-
-  // useEffect(() => {
-  //   if (users.usrstatus === 1) {
-  //     setCheck(true);
-  //   }
-  // }, [isChecked]);
+  const [tampungDate, settampungDate] = useState(users.usrefectivedate);
 
   const getTokenApi = () => {
     getToken().then((e) => {
@@ -38,7 +32,6 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   useEffect(() => {
     getTokenApi();
     setUser(currentUser);
-
     DropDown();
     DropDownSv();
     DropDownRl();
@@ -46,7 +39,21 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-
+  
+    if (name === "usrname"  ) {
+      // Validasi hanya huruf alfabet atau string kosong
+      const alphabetRegex = /^[A-Za-z\s]*$/; // Regular expression for alphabet and space
+      if (value !== "" && !alphabetRegex.test(value)) {
+        return; // Jika input tidak valid, hentikan proses selanjutnya
+      }
+    } else if (name === "usrnip" || name === "usrnotlp") {
+      // Validasi hanya angka atau string kosong
+      const numberRegex = /^\d*$/; // Regular expression for numbers
+      if (value !== "" && !numberRegex.test(value)) {
+        return; // Jika input tidak valid, hentikan proses selanjutnya
+      }
+    }
+  
     setUser((prevState) => ({
       ...prevState,
       [name]: value,
@@ -54,27 +61,33 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
   };
 
   const dataEditUser = {
-    // p_usrid: users.usruserid,
-    // p_name: users.usrname,
-    // p_nip: users.usrnip,
-    // p_email: users.usremail,
-    // p_notlp: users.usrnotlp,
-    // p_branchcode: users.usrbranch,
-    // p_spv: users.usrsupervisor,
-    // p_position: users.usrposition,
-    // p_acclevel: "administrator",
-    // p_efectivedate: "2019-06-03 00:00:00.000",
-    // p_status: "true",
-    // p_usr: "bani",
-    // p_defaultpwd: "",
-    // p_logid: "13",
+    p_usrid: users.usruserid,
+    p_name: users.usrname,
+    p_nip: users.usrnip,
+    p_email: users.usremail,
+    p_notlp: users.usrnotlp,
+    p_branchcode: users.usrbranch,
+    p_spv: users.usrsupervisor,
+    p_position: users.usrposition,
+    p_acclevel: "administrator",
+    p_efectivedate: "2019-06-03",
+    p_status: "True",
+    p_usr: "bani",
+    p_defaultpwd: "",
+    p_logid: "13",
   };
 
   const EditUser = async () => {
+    // Validasi input sebelum mengirim permintaan POST
+    if (!users.usrname || !users.usrnip) {
+      Swal.fire("Mohon lengkapi semua field", "", "error");
+      return;
+    }
+
     try {
       await axios.post(
         "http://116.206.196.65:30983/skycore/User/postJDataEditRecord",
-        JSON.stringify(dataEditUser),
+        JSON.stringify(users),
         {
           headers: {
             "Content-Type": "application/json",
@@ -182,18 +195,14 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
     setIsChecked(!isChecked);
   };
 
-  // useEffect(() => {
-
-  //   if
-  // }, [isChecked]);
-
   const checkBoxStyle = {
     margin: 0,
   };
+
   if (!isOpen) return null;
   return (
     <div class="fixed inset-0 flex items-center justify-center z-50">
-  <div class="absolute bg-white p-6 rounded-lg shadow-lg">
+      <div class="absolute bg-white p-6 rounded-lg shadow-lg">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">User Edit</h5>
@@ -204,7 +213,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
               aria-label="Close"
               onClick={onClose}></button>
           </div>
-          <div className="modal-body">
+          <div className="modal_body">
             <form>
               <div className="row">
                 <div className="col-6">
@@ -223,6 +232,7 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         name="usruserid"
                         value={users.usruserid}
                         onChange={handleInputChange}
+                        disabled
                         // onChange={(e) => setUserId(e.target.value)}
                       />
                     </div>
@@ -230,41 +240,42 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                   <div className=" row mb-1">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        Name
+                        Name <span className="text-danger">*</span>
                       </label>
                     </div>
-
                     <div className="col-9">
                       <input
                         type="text"
                         className="form-control"
                         value={users.usrname}
                         name="usrname"
-                        onChange={handleInputChange}
+                        onChange={handleInputChange}         
+                        required
                       />
                     </div>
                   </div>
                   <div className=" row mb-1">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        NIP
+                        NIP <span className="text-danger">*</span>
                       </label>
                     </div>
                     <div className="col-9">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
                         id="recipient-name"
                         value={users.usrnip}
                         name="usrnip"
                         onChange={handleInputChange}
+                        required
                       />
                     </div>
                   </div>
                   <div className=" row mb-1">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        Email
+                        Email <span className="text-danger">*</span>
                       </label>
                     </div>
                     <div className="col-9">
@@ -274,23 +285,25 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         value={users.usremail}
                         name="usremail"
                         onChange={handleInputChange}
+                        required
                       />
                     </div>
                   </div>
                   <div className=" row mb-1">
                     <div className="col-3">
                       <label for="exampleInputEmail1" class="form-label">
-                        No Tlp
+                        No Tlp <span className="text-danger">*</span>
                       </label>
                     </div>
                     <div className="col-9">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
                         id="recipient-name"
                         value={users.usrnotlp}
                         name="usrnotlp"
                         onChange={handleInputChange}
+                        required
                       />
                     </div>
                   </div>
@@ -356,8 +369,8 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         type="text"
                         className="form-control"
                         id="recipient-name"
-                        name="usrposition"
-                        value={users.usrposition}
+                        name="usraccesslevel"
+                        value={users.usraccesslevel}
                         onChange={handleInputChange}>
                         {role.map((item, i) => {
                           return (
@@ -394,9 +407,10 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                     <div className="col-9">
                       <DatePicker
                         className="form-control"
-                        // value={date}
-                        // name="usrefectivedate"
-                        onChange={handleInputChange}
+                        value={users.usrefectivedate}
+                        name="usrefectivedate"
+                        onChange={(event) => handleInputChange(event, users.usrefectivedate)}
+                        
                         // onChange={(date) => setStartDate(date)}
                       />
                     </div>
@@ -412,13 +426,13 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
                         type="text"
                         className="form-control"
                         id="recipient-name"
+                        disabled
                       />
                     </div>
                   </div>
                 </div>
               </div>
-            </form>
-          </div>
+            
           <div className="modal-footer">
             <button
               type="button"
@@ -428,11 +442,14 @@ const Modal = ({ isOpen, onClose, currentUser, reload }) => {
               Close
             </button>
             <button
-              type="button"
+              type="submit"
               className="btn btn-primary"
-              onClick={EditUser}>
+              onClick={EditUser}
+              >
               Save changes
             </button>
+          </div>
+          </form>
           </div>
         </div>
       </div>
