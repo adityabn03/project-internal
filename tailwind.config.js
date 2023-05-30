@@ -17,5 +17,10 @@ module.exports = {
     prefix: "",
     darkTheme: "dark",
   },
+  variants: {
+    extend: {
+      backgroundColor: ['odd'],
+    }
+  },
 }
 
